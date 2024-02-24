@@ -32,6 +32,6 @@ for name in input_names:
 
 
     print(f"у {name} фігурою з найбільшою площею та периметром є {saved_obj.__class__.__name__}\n"
-          f"з площею - {obj.area()}\n"
-          f"і периметром - {obj.perimetr()}\n"
+          f"з площею - {saved_obj.area()}\n"
+          f"і периметром - {saved_obj.perimetr()}\n"
           f"------------------------------------------")
