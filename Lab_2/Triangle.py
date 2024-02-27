@@ -28,17 +28,13 @@ class Triangle:
     def rotate_coords(self, x=None):
         if x is None:
             x = rand(1, 360)
+        
         radians = math.radians(x)
-
-        x = self.start[0] * math.cos(radians) - self.start[0] * math.sin(radians)
-        y = self.start[1] * math.sin(radians) + self.start[1] * math.cos(radians)
-
         x1 = self.coord_1[0] * math.cos(radians) - self.coord_1[1] * math.sin(radians)
         y1 = self.coord_1[0] * math.sin(radians) + self.coord_1[1] * math.cos(radians)
         x2 = self.coord_2[0] * math.cos(radians) - self.coord_2[1] * math.sin(radians)
         y2 = self.coord_2[0] * math.sin(radians) + self.coord_2[1] * math.cos(radians)
 
-        self.start = (x, y)
         self.coord_1 = (x1, y1)
         self.coord_2 = (x2, y2)
 

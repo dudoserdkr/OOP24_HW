@@ -5,10 +5,19 @@ import turtle as t
 triangle = Triangle(100, 100, 100, 0)
 triangle.draw()
 
-# поворот трикутника + 100 рандом трикутниківя
+# поворот трикутника
+
+for i in range(0, 360):
+    triangle.rotate_coords(i)
+    triangle.random_col()
+    triangle.draw()
+
+#100 рандом трикутниківя
 
 for i in range(100):
     triangle.random_pos()
     triangle.rotate_coords()
     triangle.random_col()
     triangle.draw()
+
+t.mainloop()
