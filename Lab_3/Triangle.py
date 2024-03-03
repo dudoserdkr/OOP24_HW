@@ -16,12 +16,12 @@ class Triangle:
     def set_coord1(self, x1, y1):
         self._coord_1 = x1, y1
 
-    def set_coord1(self, x2, y2):
+    def set_coord2(self, x2, y2):
         self._coord_2 = x2, y2
 
     def set_color(self, color):
         # assert is_color_exist(color): -- тут повинна бути перевірка на манкі тест, але її ще нема :(
-        self.color = color
+        self._color = color
 
     def set_start(self, x, y):
         self.start = (x, y)
@@ -49,7 +49,7 @@ class Triangle:
         return self._coord_2
 
     def get_color(self):
-        return self.color
+        return self._color
 
     def get_start(self):
         return self.start
@@ -58,7 +58,8 @@ class Triangle:
 
     # region main functions
 
-    def _random_angle(self):
+    @staticmethod
+    def _random_angle():
         return rand(1, 360)
 
     def _radians(self, x):
@@ -67,17 +68,20 @@ class Triangle:
 
         return math.radians(x)
 
-    def _calculate_rotate(self, fi):
-        x1 = self._coord_1[0] * math.cos(fi) - self._coord_1[1] * math.sin(fi)
-        y1 = self._coord_1[0] * math.sin(fi) + self._coord_1[1] * math.cos(fi)
-        x2 = self._coord_2[0] * math.cos(fi) - self._coord_2[1] * math.sin(fi)
-        y2 = self._coord_2[0] * math.sin(fi) + self._coord_2[1] * math.cos(fi)
+    @staticmethod
+    def _calculate_rotate(fi, coord: tuple) -> tuple:
+        x, y = coord
+        x1 = x * math.cos(fi) - y * math.sin(fi)
+        y1 = x * math.sin(fi) + y * math.cos(fi)
 
-        return (x1, y1), (x2, y2)
+        return x1, y1
 
     def rotate_coords(self, x=None):
         fi = self._radians(x)
-        self._coord_1, self._coord_2 = self._calculate_rotate(fi)
+
+        self.start = self._calculate_rotate(fi, self.start)
+        self._coord_1 = self._calculate_rotate(fi, self._coord_1)
+        self._coord_2 = self._calculate_rotate(fi, self._coord_2)
 
     def _calc_start_pos(self):
         v1 = (self._coord_1[0] + self.start[0],
@@ -88,8 +92,19 @@ class Triangle:
 
         return v1, v2
 
+    def __calc_dot_rotate(self, x, y, fi):
+        for x1, y1 in (self.start, self._coord_1, self._coord_2):
+            cur_x, cur_y = x1 - x, y1 - y
+
+            new_x, new_y = self._calculate_rotate(fi, (cur_x, cur_y))
+
+            yield new_x + x, new_y + y
+
+    def rotate_triangle(self, x, y, fi):
+        self.start, self._coord_1, self._coord_2 = self.__calc_dot_rotate(x, y, fi)
+
     def draw(self):
-        v1, v2 = self._calc_start_pos()
+        v1, v2 = self._coord_1, self._coord_2
         t.color(self._color)
         t.up()
         t.setpos(*self.start)
