@@ -1,11 +1,15 @@
 from Triangle import Triangle
 from turtle import *
 
-if __name__ == '__main__':
-    speed(0)
-    t = Triangle(100, 100, 100, 0)
-    t.draw()
-    for i in range(0, 360, 10):
-        t.rotate_triangle(100, 0, i)
-        t.draw()
-    mainloop()
+speed(0)
+t = Triangle(100, 100, 100, 0)
+print(t._is_color_exist("#188431"))
+print(t.get_color())
+t.draw()
+t.set_random_color()
+t.rotate(0, 0, 30)
+t.draw()
+t.set_random_color()
+t.rotate(0, 0, 750)
+t.draw()
+mainloop()
