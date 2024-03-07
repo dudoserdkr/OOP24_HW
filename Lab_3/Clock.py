@@ -30,8 +30,6 @@ class Numeral:
             if i % 5 == 0:
                 t.write(f"{self.hours[hour]}", font=(self.font, 3 * self.font_size, self.type_font))
                 hour += 1
-            else:
-                continue
 
             t.up()
 
@@ -46,9 +44,10 @@ class ClockFace(Numeral):
         self.face_center = (x, y)
         self.width = width
         self.dot_size = dot_size
-        self.vertex_dots = None
+        self.vertex_dots = []
 
-    def _calc_dots(self, count):
+    @staticmethod
+    def _calc_dots(count):
         """
         :param count:  список точок, з класу Numeral,
         :return: розтавляє пропорційну кожну точку на колі, і повертає їх координати
@@ -57,38 +56,54 @@ class ClockFace(Numeral):
 
         for i in count:
             difference = (pi / 2) - (i * pi / step)
-            x = self.r * cos(difference) + self.face_center[0]
-            y = self.r * sin(difference) + self.face_center[1]
+            x = cos(difference)
+            y = sin(difference)
             yield x, y
 
-    def _draw_dots(self, arr):
+    def _calculate_circle_positions(self, count, k=1):
+        for x, y in count:
+            x = x * self.r + self.face_center[0]
+            y = y * self.r + self.face_center[1]
+            self.vertex_dots += [(x, y)]
+            yield x, y, x * k, y * k
 
-        t.up()
+    def _draw_time_points(self, count, k):
 
-        for i in range(len(arr)):
-            x, y = arr[i]
-            t.setpos(x, y)
+        circle_positions = self._calc_dots(count)
+
+        dots = list(self._calculate_circle_positions(circle_positions, k))
+
+        for i in range(len(dots)):
+            x, y, x1, y1 = dots[i]
+            t.up()
 
             if i % 5 == 0:
-                t.dot(2 * self.dot_size, "#8e0922")
-
+                t.color('#8e0922')
+                t.width(2)
             else:
-                t.dot(self.dot_size, self.color)
+                t.color("#000000")
+                t.width(1)
 
-    def draw(self):
+            t.setpos(x, y)
+            t.down()
+            t.goto(x1, y1)
+            t.up()
+
+    def _draw_circles(self, k):
         t.up()
         t.setpos(self.face_center[0], self.face_center[1] - self.r)
-        t.width(self.width)
         t.down()
         t.circle(self.r)
         t.up()
+        t.setpos(self.face_center[0], self.face_center[1] - self.r * k)
+        t.down()
+        t.circle(self.r * k)
+        t.up()
 
-        arr = self._calc_dots(self.minutes)
-        arr = list(arr)
-
-        self.vertex_dots = arr
-        self._draw_dots(arr)
-        self._draw_numerals(arr)
+    def draw_face_clock(self, k=1.05):
+        self._draw_time_points(self.minutes, k)
+        self._draw_circles(k)
+        self._draw_numerals(self.vertex_dots)
 
 
 class Hand(ClockFace):
@@ -99,9 +114,9 @@ class Hand(ClockFace):
         s = t.Turtle()
 
         arr = self.vertex_dots
-        for i in range(len(arr)):
+        for i in range(0, len(arr), 5):
             x1, y1 = arr[i]
-            self.draw_hand(h, x1, y1, "#8e0922")
+            self.draw_hand(h, x1, y1, "#220922")
 
             for d in range(len(arr)):
                 x2, y2 = arr[d]
@@ -115,15 +130,31 @@ class Hand(ClockFace):
             h.undo()
 
     def draw_hand(self, obj, x, y, color="#000000"):
+        """
+
+        :param obj: передається об'єкт класу Turtle
+        :param x: координата точки
+        :param y: координата точки
+        :param color: колір стрілки
+        :return: малює стрілку
+        """
+
         obj.up()
         obj.setpos(*self.face_center)
         obj.color(color)
         obj.down()
         obj.goto(x, y)
 
+    def draw_clock(self, k):
+        t.up()
+        t.setpos(*self.face_center)
+        t.dot(5)
+        self.draw_face_clock()
+        self.update_hands(k)
+
 
 if __name__ == '__main__':
-    H = Hand(300, 5, 5)
-    H.draw()
-    H.update_hands(2)
+    H = Hand(300, 5, 5, )
+    t.speed(0)
+    H.draw_clock(30)
     t.mainloop()
