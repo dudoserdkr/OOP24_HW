@@ -178,7 +178,7 @@ class Triangle:
         self._start, self._coord_1, self._coord_2 = self._calc_scale(k)
 
     def rotate(self, fi):
-        """Зміняє основні координати трикутника на повернуті"""
+        """Змінює основні координати трикутника на повернуті"""
         self._start, self._coord_1, self._coord_2 = self._calc_dot_rotate(fi)
 
     def draw(self):
