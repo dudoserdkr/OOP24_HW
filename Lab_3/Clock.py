@@ -1,4 +1,4 @@
-from math import pi, sin, cos
+from math import pi, sin, cos, radians
 import turtle as t
 
 
@@ -108,53 +108,43 @@ class ClockFace(Numeral):
 
 class Hand(ClockFace):
 
-    def update_hands(self, k):
+    def _update_hands(self, k):
         h = t.Turtle()
         m = t.Turtle()
         s = t.Turtle()
 
-        arr = self.vertex_dots
-        for i in range(0, len(arr), 5):
-            x1, y1 = arr[i]
-            self.draw_hand(h, x1, y1, "#220922")
+        for angle_h in range(0, 360, 30):
+            self._draw_hand(h, angle_h, self.r // 3, "#220922")
 
-            for d in range(len(arr)):
-                x2, y2 = arr[d]
-                self.draw_hand(m, x2, y2, "#9e0922")
+            for angle_m in range(0, 360, 6):
+                self._draw_hand(m, angle_m, self.r // 2, "#9e0922")
 
-                for v in range(0, len(arr), k):
-                    x3, y3 = arr[v]
-                    self.draw_hand(s, x3, y3, "#99ff99")
+                for angle_s in range(0, 360, 6 * k):
+                    self._draw_hand(s, angle_s, self.r, "#0a00ff")
+
                     s.undo()
                 m.undo()
             h.undo()
 
-    def draw_hand(self, obj, x, y, color="#000000"):
-        """
-
-        :param obj: передається об'єкт класу Turtle
-        :param x: координата точки
-        :param y: координата точки
-        :param color: колір стрілки
-        :return: малює стрілку
-        """
+    def _draw_hand(self, obj, angle, lenght, color="#000000"):
 
         obj.up()
-        obj.setpos(*self.face_center)
         obj.color(color)
+        obj.setpos(*self.face_center)
+        obj.setheading(90 - angle)
         obj.down()
-        obj.goto(x, y)
+        obj.forward(lenght)
 
     def draw_clock(self, k):
         t.up()
         t.setpos(*self.face_center)
         t.dot(5)
         self.draw_face_clock()
-        self.update_hands(k)
+        self._update_hands(k)
 
 
 if __name__ == '__main__':
     H = Hand(300, 5, 5, )
     t.speed(0)
-    H.draw_clock(30)
+    H.draw_clock(60)
     t.mainloop()
