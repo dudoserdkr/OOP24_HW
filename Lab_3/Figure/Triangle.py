@@ -9,9 +9,6 @@ class Triangle(Figure):
         self.vertex2 = (x2, y2)
         self._dimention = 2
 
-    def get_dimention(self):
-        return self._dimention
-
     @staticmethod
     def get_side_len(v1, v2: tuple) -> float:
         abs_len = ((v2[0] - v1[0]) ** 2 + (v2[1] - v1[1]) ** 2) ** 0.5
@@ -29,35 +26,17 @@ class Triangle(Figure):
         return AB, AC, CB
 
     def get_perimetr(self):
-        assert self._dimention != 3
+        super().get_perimetr()
         sides = self._get_sides()
         P = sum(sides)
         return P
 
     def get_square(self):
-        assert self._dimention != 3
+        super().get_square()
         AB, AC, CB = self._get_sides()
         p = (AB + AC + CB) / 2
         S = (p * (p - AB) * (p - AC) * (p - CB)) ** 0.5
         return S
-
-    def get_squareSurface(self):
-        assert self._dimention == 2
-
-    def get_squareBase(self):
-        assert self._dimention == 2
-
-    def get_height(self):
-        assert self._dimention == 2
-
-    def figure_vol(self):
-        pass
-
-    def get_volume(self):
-        if self._dimention == 2:
-            return self.get_square()
-        else:
-            return self.figure_vol()
 
     def _draw_vertex(self, *args):
         t.up()

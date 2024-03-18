@@ -10,6 +10,7 @@ class Figure:
         self.rotation_angel = 0
         self.scale_coords = (1, 1)
         self.start = (0, 0)
+        self._dimention = 2
 
     # region setters
 
@@ -27,6 +28,33 @@ class Figure:
         self.scale_coords = scale_x, scale_y
 
     # endregion
+
+    def get_dimention(self):
+        return self._dimention
+
+    def get_perimetr(self):
+        assert self._dimention == 2
+
+    def get_square(self):
+        assert self._dimention == 2
+
+    def get_squareSurface(self):
+        assert self._dimention != 2
+
+    def get_squareBase(self):
+        assert self._dimention != 2
+
+    def get_height(self):
+        assert self._dimention != 2
+
+    def figure_vol(self):
+        assert self._dimention == 2
+
+    def get_volume(self):
+        if self._dimention == 2:
+            return self.get_square()
+        else:
+            return self.figure_vol()
 
     # region staticmethods
 
