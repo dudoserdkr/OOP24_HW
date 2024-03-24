@@ -38,24 +38,27 @@ class Triangle(Figure):
         S = (p * (p - AB) * (p - AC) * (p - CB)) ** 0.5
         return S
 
+    def _calc_vertex(self, vertex):
+        vertex = self.calc_vertex(*vertex)
+        vertex = self.scale_vertex(*vertex)
+        vertex = self.rotation_calc(*vertex)
+        return vertex
+
     def _draw_vertex(self, *args):
         t.up()
         t.setpos(*self.start)
         t.down()
         for vertex in args:
-            vertex = self.calc_vertex(*vertex)
-            vertex = self.scale_vertex(*vertex)
-            vertex = self.rotation_calc(*vertex)
+            vertex = self._calc_vertex(vertex)
             t.goto(*vertex)
 
         t.goto(*self.start)
         t.up()
 
     def draw(self):
-        v1 = self.start
         v2 = self.vertex1
         v3 = self.vertex2
-        self._draw_vertex(v1, v2, v3)
+        self._draw_vertex(v2, v3)
 
 
 if __name__ == '__main__':

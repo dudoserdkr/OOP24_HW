@@ -25,12 +25,11 @@ class Trapeze(Triangle):
         return P
 
     def draw(self):
-        v1 = self.start
         v2 = self.vertex1
         v3 = self.vertex3
         v4 = self.vertex2
 
-        self._draw_vertex(v1, v2, v3, v4)
+        self._draw_vertex(v2, v3, v4)
 
 
 if __name__ == '__main__':
