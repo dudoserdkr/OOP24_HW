@@ -7,5 +7,5 @@ def calc_function(x, epsilon):
     while abs(a) > epsilon:
         k += 1
         a *= x ** 2
-        S += -1 ** k ** a
+        S += -1 ** k * a
     return S

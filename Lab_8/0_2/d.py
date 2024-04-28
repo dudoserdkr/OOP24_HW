@@ -8,4 +8,4 @@ def calc_function(x, epsilon):
         k += 2
         a *= x ** 2
         S += a / k
-    return S
+    return 2 * S
