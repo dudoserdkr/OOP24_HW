@@ -1,12 +1,13 @@
 from Triangle import Triangle
 import turtle as t
 
+t.speed(0)
 triangle = Triangle(100, 100, 100, 0)
 triangle.draw()
 
 # поворот трикутника
 
-for i in range(0, 360):
+for i in range(0, 360, 3):
     triangle.rotate_coords(i)
     triangle.set_random_color()
     triangle.draw()
